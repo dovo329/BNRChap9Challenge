@@ -197,4 +197,15 @@ targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath
 
 }*/
 
+- (BOOL)tableView:(UITableView *)tableView
+canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSUInteger numberOfObjects = [[[BNRItemStore sharedStore] allItems] count];
+    if (indexPath.row >= numberOfObjects) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 @end
