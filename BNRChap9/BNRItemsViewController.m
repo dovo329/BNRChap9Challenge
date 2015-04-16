@@ -157,8 +157,31 @@ forRowAtIndexPath:(NSIndexPath *)indexPath
 moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath
        toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    [[BNRItemStore sharedStore] moveItemAtIndex:sourceIndexPath.row
+    NSLog(@"sourceIndexPath == %@", sourceIndexPath);
+    NSLog(@"destinationIndexPath == %@", destinationIndexPath);
+    int objectCount = (int)[[[BNRItemStore sharedStore] allItems] count];
+    NSLog(@"destinationIndexPath.row==%d objectCount == %d", (int)destinationIndexPath.row, objectCount);
+    if (destinationIndexPath.row < objectCount) {
+        [[BNRItemStore sharedStore] moveItemAtIndex:sourceIndexPath.row
                                         toIndex:destinationIndexPath.row];
+    }
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView
+targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath
+       toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    // get number of objects
+    NSUInteger numberOfObjects = [[[BNRItemStore sharedStore] allItems] count];
+    
+    if ( (proposedDestinationIndexPath.row>=numberOfObjects) || (sourceIndexPath.row>=numberOfObjects) ) {
+        //NSLog(@"HERE sourceIndexPath = %d proposedDestinationIndexPath = %d", sourceIndexPath.row, proposedDestinationIndexPath.row);
+        return sourceIndexPath;
+    }
+    else{
+        //NSLog(@"count=%d %d", [[[BNRItemStore sharedStore] allItems] count], proposedDestinationIndexPath.row);
+        return proposedDestinationIndexPath;
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView
@@ -166,5 +189,12 @@ titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return @"Remove";
 }
+
+/*- (NSIndexPath *)tableView:(UITableView *)tableView
+targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath
+       toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+
+}*/
 
 @end
